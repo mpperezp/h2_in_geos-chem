@@ -170,10 +170,9 @@ EmisCO_BioBurn     CO     111    -1  -1   2   kg/m2/s  CO_emission_flux_from_bio
 EmisCO_Ship        CO     0      10  -1   2   kg/m2/s  CO_emission_flux_from_ships
 
 ###############################################################################
-#####  H2 sources                                                         #####
+#####  H2 sources                                                         ##### 
 ###############################################################################
-EmisH2_Anthro      H2     0      1   -1   2   kg/m2/s  H2_emission_flux_from_anthropogenic
-EmisH2_Ship        H2     0     10   -1   2   kg/m2/s  H2_emission_flux_from_ships
+EmisH2_Ocean       H2     0       1   1   2   kg/m2/s  H2_emission_flux_from_oceans 
 
 ###############################################################################
 #####  CO2 emissions                                                      ##### 
