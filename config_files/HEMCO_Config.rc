@@ -28,6 +28,9 @@
 # !REVISION HISTORY: 
 #  Navigate to your unit tester directory and type 'gitk' at the prompt
 #  to browse the revision history.
+# !ADDITIONAL NOTES:
+#  File modified by Maria Paula Perez Pena to include H2 emissions
+#  scaled from CO emissions from the CEDS emissions inventory
 #EOP
 #------------------------------------------------------------------------------
 #BOC
@@ -130,6 +133,8 @@ Warnings:                    1
 # ----- NON-EMISSIONS DATA ------------------
     --> MODIS_XLAI             :       true
     --> Yuan_XLAI              :       false
+# ----- OCEAN EMISSIONS FOR H2 --------------
+    --> POCEAN                 :       true
 # -----------------------------------------------------------------------------
 100     Custom                 : off   - 
 101     SeaFlux                : on    DMS/ACET/ALD2
@@ -138,11 +143,11 @@ Warnings:                    1
     --> LUT source dir         :       $ROOT/PARANOX/v2015-02
 103     LightNOx               : on    NO
     --> CDF table              :       $ROOT/LIGHTNOX/v2014-07/light_dist.ott2010.dat
-104     SoilNOx                : off   NO 
+104     SoilNOx                : on    NO 
     --> Use fertilizer NOx     :       true
-105     DustDead               : off   DST1/DST2/DST3/DST4 
+105     DustDead               : on    DST1/DST2/DST3/DST4 
 106     DustGinoux             : off   DST1/DST2/DST3/DST4
-107     SeaSalt                : off   SALA/SALC/Br2/BrSALA/BrSALC
+107     SeaSalt                : on    SALA/SALC/Br2/BrSALA/BrSALC
     --> SALA lower radius      :       0.01 
     --> SALA upper radius      :       0.5
     --> SALC lower radius      :       0.5
@@ -165,9 +170,9 @@ Warnings:                    1
     --> Othrterp to SOAP       :       0.050
     --> Othrterp to SOAS       :       0.050
 #10% mass yield from other terpenes to SOA
-111     GFED                   : on    NO/CO/ALK4/ACET/MEK/ALD2/PRPE/C3H8/CH2O/C2H6/SO2/NH3/BCPO/BCPI/OCPO/OCPI/POG1/POG2/MTPA/BENZ/TOLU/XYLE/NAP/EOH/SOAP
+111     GFED                   : on    H2/NO/CO/ALK4/ACET/MEK/ALD2/PRPE/C3H8/CH2O/C2H6/SO2/NH3/BCPO/BCPI/OCPO/OCPI/POG1/POG2/MTPA/BENZ/TOLU/XYLE/NAP/EOH/SOAP
     --> GFED4                  :       true
-    --> GFED_daily             :       false
+    --> GFED_daily             :       falsei
     --> GFED_3hourly           :       false
     --> Scaling_CO             :       1.05
     --> Scaling_NAP            :       2.75e-4
@@ -175,6 +180,7 @@ Warnings:                    1
     --> hydrophilic OC         :       0.5
     --> fraction POG1          :       0.49
     --> CO to SOAP             :       0.013
+    --> CO to H2               :       0.021
 #see the note near scale factor 281 for the source of this emis factor
 114     FINN                   : off   NO/CO/ALK4/ACET/MEK/ALD2/PRPE/C3H8/CH2O/C2H6/SO2/NH3/BCPI/BCPO/OCPI/OCPO/GLYC/HAC/SOAP
     --> FINN_daily             :       false
@@ -205,6 +211,7 @@ Warnings:                    1
 0 APEI_NO   $ROOT/APEI/v2016-11/APEI.0.1x0.1.nc NOx 1989-2014/1/1/0 C xy kg/m2/s NO   25/1002/115    1 30
 0 APEI_CO   $ROOT/APEI/v2016-11/APEI.0.1x0.1.nc CO  1989-2014/1/1/0 C xy kg/m2/s CO   26/52/1002     1 30
 0 APEI_SOAP -                                   -   -               - -  -       SOAP 26/52/1002/280 1 30
+0 APEI_H2   -                                   -   -               - -  -       H2   26/52/1002/282 1 30
 0 APEI_SO2  $ROOT/APEI/v2016-11/APEI.0.1x0.1.nc SOx 1989-2014/1/1/0 C xy kg/m2/s SO2  60/1002        1 30
 0 APEI_SO4  -                                   -   -               - -  -       SO4  60/65/1002     1 30
 0 APEI_pFe  -                                   -   -               - -  -       pFe  60/68/1002     1 30
@@ -370,6 +377,7 @@ Warnings:                    1
 0 NEI11_OTHPT_RCHO     $ROOT/NEI2011/v2015-03/$MM/NEI11_0.1x0.1_2011$MM$DD_othpt.nc    ALDX     2006-2013/1-12/1-31/* C xyz kg/m2/s  RCHO 254/1007     1   50
 #0 NEI11_OTHPT_MACR    $ROOT/NEI2011/v2015-03/$MM/NEI11_0.1x0.1_2011$MM$DD_othpt.nc    ACROLEIN 2006-2013/1-12/1-31/* C xyz kg/m2/s  MACR 254/1007     1   50
 0 NEI11_OTHPT_ACET     $ROOT/NEI2011/v2015-03/$MM/NEI11_0.1x0.1_2011$MM$DD_othpt.nc    PAR      2006-2013/1-12/1-31/* C xyz kgC/m2/s ACET 254/1007/260 1   50
+
 0 NEI11_OTHPT_C3H8     -                                                               -        -                     - -   -        C3H8 254/1007/261 1   50
 0 NEI11_OTHPT_MEK      -                                                               -        -                     - -   -        MEK  254/1007/262 1   50
 0 NEI11_OTHPT_ALK4     -                                                               -        -                     - -   -        ALK4 254/1007/263 1   50
@@ -436,6 +444,7 @@ Warnings:                    1
 0 NEI11_SURFACE_HONO   $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean.nc          HONO     2006-2013/1-12/1/0 C xy  kg/m2/s  HNO2 25/210/251/1007     1 50
 0 NEI11_SURFACE_CO     $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean.nc          CO       2006-2013/1-12/1/0 C xy  kg/m2/s  CO   26/211/252/1007     1 50
 0 NEI11_SURFACE_SOAP   -                                                                       -        -                  - -   -        SOAP 252/1007/280        1 50
+0 NEI11_SURFACE_H2     -                                                                       -        -                  - -   -        H2   252/1007/282        1 50
 0 NEI11_SURFACE_NH3    $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean.nc          NH3      2006-2013/1-12/1/0 C xy  kg/m2/s  NH3  26/213/253/1007     1 50
 0 NEI11_SURFACE_CH2O   $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean.nc          FORM     2006-2013/1-12/1/0 C xy  kg/m2/s  CH2O 26/213/254/1007     1 50
 0 NEI11_SURFACE_RCHO   $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean.nc          ALDX     2006-2013/1-12/1/0 C xy  kg/m2/s  RCHO 26/213/254/1007     1 50
@@ -568,6 +577,7 @@ Warnings:                    1
 0 NEI11_OTHPT_HONO     $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_othpt.nc    HONO     2006-2013/1-12/1/0 C xyz kg/m2/s  HNO2 25/210/251/1007     1   50
 0 NEI11_OTHPT_CO       $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_othpt.nc    CO       2006-2013/1-12/1/0 C xyz kg/m2/s  CO   26/211/252/1007     1   50
 0 NEI11_OTHPT_SOAP     -                                                                       -        -                  - -   -        SOAP 252/1007/280        1   50
+0 NEI11_OTHPT_H2       -                                                                       -        -                  - -   -        H2   252/1007/282        1   50
 0 NEI11_OTHPT_NH3      $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_othpt.nc    NH3      2006-2013/1-12/1/0 C xyz kg/m2/s  NH3  26/213/253/1007     1   50
 0 NEI11_OTHPT_CH2O     $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_othpt.nc    FORM     2006-2013/1-12/1/0 C xyz kg/m2/s  CH2O 26/213/254/1007     1   50
 0 NEI11_OTHPT_RCHO     $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_othpt.nc    ALDX     2006-2013/1-12/1/0 C xyz kg/m2/s  RCHO 26/213/254/1007     1   50
@@ -601,6 +611,7 @@ Warnings:                    1
 0 NEI11_PTNONIPM_HONO  $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_ptnonipm.nc HONO     2006-2013/1-12/1/0 C xyz kg/m2/s  HNO2 25/210/251/1007     1   50
 0 NEI11_PTNONIPM_CO    $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_ptnonipm.nc CO       2006-2013/1-12/1/0 C xyz kg/m2/s  CO   26/211/252/1007     1   50
 0 NEI11_PTNONIPM_SOAP  -                                                                       -        -                  - -   -        SOAP 252/1007/280        1   50
+0 NEI11_PTNONIPM_H2    -                                                                       -        -                  - -   -        H2   252/1007/282        1   50
 0 NEI11_PTNONIPM_NH3   $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_ptnonipm.nc NH3      2006-2013/1-12/1/0 C xyz kg/m2/s  NH3  26/213/253/1007     1   50
 0 NEI11_PTNONIPM_CH2O  $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_ptnonipm.nc FORM     2006-2013/1-12/1/0 C xyz kg/m2/s  CH2O 26/213/254/1007     1   50
 0 NEI11_PTNONIPM_RCHO  $ROOT/NEI2011/v2017-02-MM/$MM/NEI11_0.1x0.1_2011$MM_monmean_ptnonipm.nc ALDX     2006-2013/1-12/1/0 C xyz kg/m2/s  RCHO 26/213/254/1007     1   50
@@ -639,12 +650,14 @@ Warnings:                    1
 0 MIX_NO_TRA   $ROOT/MIX/v2015-03/MIX_Asia_NO.generic.025x025.nc   NO_TRANSPORT     2008-2010/1-12/1/0 C xy kg/m2/s  NO   1/27/25/1006      1 45
 0 MIX_CO_IND   $ROOT/MIX/v2015-03/MIX_Asia_CO.generic.025x025.nc   CO_INDUSTRY      2008-2010/1-12/1/0 C xy kg/m2/s  CO   6/28/26/1006      1 45
 0 MIX_SOAP_IND -                                                   -                -                  - -  -        SOAP 6/28/26/1006/280  1 45
+0 MIX_H2_IND   -                                                   -                -                  - -  -        H2   6/28/26/1006/282  1 45
 0 MIX_CO_POW   $ROOT/MIX/v2015-03/MIX_Asia_CO.generic.025x025.nc   CO_POWER         2008-2010/1-12/1/0 C xy kg/m2/s  CO   6/28/26/1006      1 45
 0 MIX_SOAP_POW -                                                   -                -                  - -  -        SOAP 6/28/26/1006/280  1 45
 0 MIX_CO_RES   $ROOT/MIX/v2015-03/MIX_Asia_CO.generic.025x025.nc   CO_RESIDENTIAL   2008-2010/1-12/1/0 C xy kg/m2/s  CO   6/28/26/1006      1 45
 0 MIX_SOAP_RES -                                                   -                -                  - -  -        SOAP 6/28/26/1006/280  1 45
 0 MIX_CO_TRA   $ROOT/MIX/v2015-03/MIX_Asia_CO.generic.025x025.nc   CO_TRANSPORT     2008-2010/1-12/1/0 C xy kg/m2/s  CO   6/28/26/1006      1 45
 0 MIX_SOAP_TRA -                                                   -                -                  - -  -        SOAP 6/28/26/1006/280  1 45
+0 MIX_H2_TRA   -                                                   -                -                  - -  -        H2   6/28/26/1006/282  1 45
 0 MIX_SO2_IND  $ROOT/MIX/v2015-03/MIX_Asia_SO2.generic.025x025.nc  SO2_INDUSTRY     2008-2010/1-12/1/0 C xy kg/m2/s  SO2  11/29/1006        1 45
 0 MIX_SO4_IND  -                                                   -                -                  - -  -        SO4  11/29/63/1006     1 45
 0 MIX_pFe_IND  -                                                   -                -                  - -  -        pFe  11/29/66/1006     1 45
@@ -723,6 +736,7 @@ Warnings:                    1
 # ------------------------
 0 DICE_CARS_CO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-cars-2013-v01-4Oct2016.nc  CO      2013/1/1/0 C xy g/m2/yr  CO    26/1008         1 60
 0 DICE_CARS_SOAP  -                                                                 -       -          - -  -        SOAP  26/1008/280     1 60
+0 DICE_CARS_H2    -                                                                 -       -          - -  -        H2    26/1008/282     1 60
 0 DICE_CARS_NO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-cars-2013-v01-4Oct2016.nc  NO      2013/1/1/0 C xy g/m2/yr  NO    25/30/1008      1 60
 0 DICE_CARS_ALK4  $ROOT/DICE_Africa/v2016-10/DICE-Africa-cars-2013-v01-4Oct2016.nc  ALK4    2013/1/1/0 C xy g/m2/yr  ALK4  26/1008         1 60
 0 DICE_CARS_ISOP  $ROOT/DICE_Africa/v2016-10/DICE-Africa-cars-2013-v01-4Oct2016.nc  ISOP    2013/1/1/0 C xy g/m2/yr  ISOP  26/1008         1 60
@@ -749,6 +763,7 @@ Warnings:                    1
 # ------------------------
 0 DICE_MOTORCYCLES_CO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-motorcycles-2013-v01-4Oct2016.nc  CO     2013/1/1/0 C xy g/m2/yr  CO    26/1008          1 60
 0 DICE_MOTORCYCLES_SOAP  -                                                                        -      -          - -  -        SOAP  26/1008/280      1 60
+0 DICE_MOTORCYCLES_H2    -                                                                        -      -          - -  -        H2    26/1008/282      1 60
 0 DICE_MOTORCYCLES_NO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-motorcycles-2013-v01-4Oct2016.nc  NO     2013/1/1/0 C xy g/m2/yr  NO    25/30/1008       1 60
 0 DICE_MOTORCYCLES_SO2   $ROOT/DICE_Africa/v2016-10/DICE-Africa-motorcycles-2013-v01-4Oct2016.nc  SO2    2013/1/1/0 C xy g/m2/yr  SO2   31/78/1008       1 60
 0 DICE_MOTORCYCLES_SO4   -                                                                        -      -          - -  -        SO4   31/63/1008       1 60
@@ -770,6 +785,7 @@ Warnings:                    1
 # ------------------------
 0 DICE_BACKUPGEN_CO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-generator-use-2013-v01-4Oct2016.nc  CO   2013/1/1/0 C xy g/m2/yr  CO    26/1008          1 60
 0 DICE_BACKUPGEN_SOAP  -                                                                          -    -          - -  -        SOAP  26/1008/280      1 60
+0 DICE_BACKUPGEN_H2    -                                                                          -    -          - -  -        H2    26/1008/282      1 60
 0 DICE_BACKUPGEN_NO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-generator-use-2013-v01-4Oct2016.nc  NO   2013/1/1/0 C xy g/m2/yr  NO    25/30/1008       1 60
 0 DICE_BACKUPGEN_NO2   $ROOT/DICE_Africa/v2016-10/DICE-Africa-generator-use-2013-v01-4Oct2016.nc  NO2  2013/1/1/0 C xy g/m2/yr  NO2   25/30/1008       1 60
 0 DICE_BACKUPGEN_SO2   $ROOT/DICE_Africa/v2016-10/DICE-Africa-generator-use-2013-v01-4Oct2016.nc  SO2  2013/1/1/0 C xy g/m2/yr  SO2   31/78/1008       1 60
@@ -819,6 +835,7 @@ Warnings:                    1
 # ------------------------
 0 DICE_GASFLARE_CO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-gas-flares-2013-v01-4Oct2016.nc  CO    2013/1/1/0 C xy g/m2/yr  CO    26/1008          1 60
 0 DICE_GASFLARE_SOAP  -                                                                       -     -          - -  -        SOAP  26/1008/280      1 60
+0 DICE_GASFLARE_H2    -                                                                       -     -          - -  -        H2    26/1008/282      1 60
 0 DICE_GASFLARE_NO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-gas-flares-2013-v01-4Oct2016.nc  NO    2013/1/1/0 C xy g/m2/yr  NO    25/30/1008       1 60
 0 DICE_GASFLARE_ALK4  $ROOT/DICE_Africa/v2016-10/DICE-Africa-gas-flares-2013-v01-4Oct2016.nc  ALK4  2013/1/1/0 C xy g/m2/yr  ALK4  26/1008          1 60
 0 DICE_GASFLARE_ALD2  $ROOT/DICE_Africa/v2016-10/DICE-Africa-gas-flares-2013-v01-4Oct2016.nc  ALD2  2013/1/1/0 C xy g/m2/yr  ALD2  26/1008          1 60
@@ -895,6 +912,7 @@ Warnings:                    1
 # ------------------------------
 0 DICE_KEROSENE_CO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-kerosene-use-2013-v01-4Oct2016.nc  CO    2013/1/1/0 C xy g/m2/yr  CO    26/1008          1 60
 0 DICE_KEROSENE_SOAP  -                                                                         -     -          - -  -        SOAP  26/1008/280      1 60
+0 DICE_KEROSENE_H2    -                                                                         -     -          - -  -        H2    26/1008/282      1 60
 0 DICE_KEROSENE_BCPI  $ROOT/DICE_Africa/v2016-10/DICE-Africa-kerosene-use-2013-v01-4Oct2016.nc  BC    2013/1/1/0 C xy g/m2/yr  BCPI  70/1008          1 60
 0 DICE_KEROSENE_BCPO  -                                                                         -     -          - -  -        BCPO  71/1008          1 60
 0 DICE_KEROSENE_OCPI  $ROOT/DICE_Africa/v2016-10/DICE-Africa-kerosene-use-2013-v01-4Oct2016.nc  OC    2013/1/1/0 C xy g/m2/yr  OCPI  72/1008          1 60
@@ -905,6 +923,7 @@ Warnings:                    1
 # ------------------------------
 0 DICE_OILREFINING_CO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-adhoc-oil-refining-2006-v01-4Oct2016.nc  CO    2013/1/1/0 C xy g/m2/yr  CO    26/1008          1 60
 0 DICE_OILREFINING_SOAP  -                                                                               -     -          - -  -        SOAP  26/1008/280      1 60
+0 DICE_OILREFINING_H2    -                                                                               -     -          - -  -        H2    26/1008/282      1 60
 0 DICE_OILREFINING_NO    $ROOT/DICE_Africa/v2016-10/DICE-Africa-adhoc-oil-refining-2006-v01-4Oct2016.nc  NO    2013/1/1/0 C xy g/m2/yr  NO    25/30/1008       1 60
 0 DICE_OILREFINING_SO2   $ROOT/DICE_Africa/v2016-10/DICE-Africa-adhoc-oil-refining-2006-v01-4Oct2016.nc  SO2   2013/1/1/0 C xy g/m2/yr  SO2   31/78/1008       1 60
 0 DICE_OILREFINING_SO4   -                                                                               -     -          - -  -        SO4   31/63/1008       1 60
@@ -1096,8 +1115,10 @@ Warnings:                    1
 0 CEDS_SOAP_ENE   -                                                                    -                 -                  - -  -       SOAP  26/280    1 5
 0 CEDS_CO_IND     $ROOT/CEDS/v2018-08/$YYYY/CO-em-anthro_CMIP_CEDS_$YYYY.nc            CO_ind            1750-2014/1-12/1/0 C xy kg/m2/s CO    26        1 5
 0 CEDS_SOAP_IND   -                                                                    -                 -                  - -  -       SOAP  26/280    1 5
+0 CEDS_H2_IND     -                                                                    -                 -                  - -  -       H2    26/282    1 5
 0 CEDS_CO_TRA     $ROOT/CEDS/v2018-08/$YYYY/CO-em-anthro_CMIP_CEDS_$YYYY.nc            CO_tra            1750-2014/1-12/1/0 C xy kg/m2/s CO    26        1 5
 0 CEDS_SOAP_TRA   -                                                                    -                 -                  - -  -       SOAP  26/280    1 5
+0 CEDS_H2_TRA     -                                                                    -                 -                  - -  -       H2    26/282    1 5
 0 CEDS_CO_RCO     $ROOT/CEDS/v2018-08/$YYYY/CO-em-anthro_CMIP_CEDS_$YYYY.nc            CO_rco            1750-2014/1-12/1/0 C xy kg/m2/s CO    26        1 5
 0 CEDS_SOAP_RCO   -                                                                    -                 -                  - -  -       SOAP  26/280    1 5
 0 CEDS_CO_SLV     $ROOT/CEDS/v2018-08/$YYYY/CO-em-anthro_CMIP_CEDS_$YYYY.nc            CO_slv            1750-2014/1-12/1/0 C xy kg/m2/s CO    26        1 5
@@ -1738,6 +1759,7 @@ Warnings:                    1
 (((CEDS_SHIP
 0 CEDS_CO_SHP     $ROOT/CEDS/v2018-08/$YYYY/CO-em-anthro_CMIP_CEDS_$YYYY.nc            CO_shp            1750-2014/1-12/1/0 C xy kg/m2/s CO    26     10 5
 0 CEDS_SOAP_SHP   -                                                                    -                 -                  - -  -       SOAP  26/280 10 5
+0 CEDS_H2_SHP     -                                                                    -                 -                  - -  -       H2  26/282 10 5
 0 CEDS_SO2_SHP    $ROOT/CEDS/v2018-08/$YYYY/SO2-em-anthro_CMIP_CEDS_$YYYY.nc           SO2_shp           1750-2014/1-12/1/0 C xy kg/m2/s SO2   -      10 5
 0 CEDS_SO4_SHP    -                                                                    -                 -                  - -  -       SO4   63     10 5
 0 CEDS_pFe_SHP    -                                                                    -                 -                  - -  -       pFe   66     10 5
@@ -2082,6 +2104,7 @@ Warnings:                    1
 (((GFAS
 0 GFAS_CO    $ROOT/GFAS/v2018-09/$YYYY/GFAS_$YYYY$MM.nc cofire        2003-2018/1-12/1-31/0 C xyL=1:scal300 kg/m2/s CO   75     5 3
 0 GFAS_SOAP  $ROOT/GFAS/v2018-09/$YYYY/GFAS_$YYYY$MM.nc cofire        2003-2018/1-12/1-31/0 C xyL=1:scal300 kg/m2/s SOAP 75/281 5 3
+0 GFAS_H2    $ROOT/GFAS/v2018-09/$YYYY/GFAS_$YYYY$MM.nc cofire        2003-2018/1-12/1-31/0 C xyL=1:scal300 kg/m2/s H2   75/283 5 3
 0 GFAS_NO    $ROOT/GFAS/v2018-09/$YYYY/GFAS_$YYYY$MM.nc noxfire       2003-2018/1-12/1-31/0 C xyL=1:scal300 kg/m2/s NO   75     5 3
 0 GFAS_BCPI  $ROOT/GFAS/v2018-09/$YYYY/GFAS_$YYYY$MM.nc bcfire        2003-2018/1-12/1-31/0 C xyL=1:scal300 kg/m2/s BCPI 70/75  5 3
 0 GFAS_BCPO  $ROOT/GFAS/v2018-09/$YYYY/GFAS_$YYYY$MM.nc bcfire        2003-2018/1-12/1-31/0 C xyL=1:scal300 kg/m2/s BCPO 71/75  5 3
@@ -2106,6 +2129,15 @@ Warnings:                    1
 0 GFAS_BENZ  $ROOT/GFAS/v2018-09/$YYYY/GFAS_$YYYY$MM.nc c6h6fire      2003-2018/1-12/1-31/0 C xyL=1:scal300 kg/m2/s BENZ 75     5 3
 0 GFAS_XYLE  $ROOT/GFAS/v2018-09/$YYYY/GFAS_$YYYY$MM.nc c8h10fire     2003-2018/1-12/1-31/0 C xyL=1:scal300 kg/m2/s XYLE 75     5 3
 )))GFAS
+
+#==============================================================================
+# --- PRICE POCEAN EMISSIONS ---
+# %%% NOTE: The emissions used here belong to the onces used by Price et al.,
+#           (2007)
+#==============================================================================
+(((POCEAN
+0 PRICE_H2_SEA  /scratch/m19/mp9272/H2_project/geos-chemV12.5.0/OceanEmis/H2-em-ocean_emisflux4x5.nc EmisH2  1985/1-12/1/0 C xy kg/m2/s H2 - 1 1    
+)))POCEAN
 
 #==============================================================================
 # --- Anthropogenic Fugitive, Combustion and Industrial Dust ---
@@ -3323,9 +3355,21 @@ Warnings:                    1
 #   0.069 g AVOC (g CO)−1 (Hayes et al., 2015) and
 #   0.013 g BBVOC (g CO)−1 (Cubison et al., 2011).
 #   They are both oxidized by OH in the model ... to generate SOA.
+#   
 #==============================================================================
 280 COtoSOAP_anth 0.069 - - - xy 1 1
 281 COtoSOAP_burn 0.013 - - - xy 1 1
+
+
+#==============================================================================
+# --- H2-emissions scaled from CO  ---
+#
+# Modified by Perez-Pena on Jan. 2020 to include a fraction to estimate H2 emis.
+# based in previous work done by Price et al., (2007)
+#
+#==============================================================================
+282 COtoH2_anth   0.042 - - - xy 1 1
+283 COtoH2_burn   0.021 - - - xy 1 1
 
 #==============================================================================
 # --- QFED vertical partitioning ---
